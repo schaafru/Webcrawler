@@ -22,7 +22,7 @@ def webcrawler(number_movies):
         'class': 'table'
       }).find_all('a')
 
-    # print("movies: ", movies)
+    #print("movies: ", movies)
 
     count = 0
 
@@ -36,19 +36,20 @@ def webcrawler(number_movies):
         print("\nRotten Tomatoes Top", number_movies, "Movies Of All Time:\n")
 
     for i in movies:
-        while count < number_movies:
-            urls = 'https://www.rottentomatoes.com' + i['href']
-            movies_lst.append(urls)
-            count += 1
-            movie_url = urls
-            movie_f = requests.get(movie_url, headers=headers)
-            movie_soup = BeautifulSoup(movie_f.content, 'lxml')
-            movie_content = movie_soup.find('div', {
-              'class': 'movie_synopsis clamp clamp-6 js-clamp'
-            })
-            description = movie_content.string.strip()
-            print(count, urls, '\n Title: ' + i.string.strip())
-            print(' Description: ' + textwrap.fill(description, 160), "\n")
+        if count == number_movies:
+            return
+        urls = 'https://www.rottentomatoes.com' + i['href']
+        movies_lst.append(urls)
+        count += 1
+        movie_url = urls
+        movie_f = requests.get(movie_url, headers=headers)
+        movie_soup = BeautifulSoup(movie_f.content, 'lxml')
+        movie_content = movie_soup.find('div', {
+          'class': 'movie_synopsis clamp clamp-6 js-clamp'
+        })
+        description = movie_content.string.strip()
+        print(count, urls, '\n Title: ' + i.string.strip())
+        print(' Description: ' + textwrap.fill(description, 160), "\n")
 
 
 if __name__ == "__main__":
